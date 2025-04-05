@@ -28,13 +28,31 @@ async function run() {
     // Send a ping to confirm a successful connection
 
 
+    const eventCollection = client.db("communionHubDB").collection("events");
 
+    // Get all events data__
+    app.get("/events", async (req, res) => {
+      const result = await eventCollection.find().toArray();
+      res.send(result);
+    })
 
+    // Get event data by category__
 
+    app.get("/event", async (req, res) => {
+      const category = req.query.category;
+      const query = {category: category};
+      const result = await eventCollection.find(query).toArray();
+      res.send(result);
+    })
 
+    // Post event data__
 
-
-
+    app.post("/new-event", async (req, res) => {
+      const eventData = req.body;
+      console.log(eventData);
+      const result = await eventCollection.insertOne(eventData);
+      res.send(result);
+    })
 
 
 
